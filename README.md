@@ -1,58 +1,33 @@
-# AllenNLP Demo
+# Coreference Search Framework, Implemented on top of AllenNLP Demo Project
 
-This repository contains the AllenNLP demo.
-
-Here is an example for how to manually build the Docker image and run the demo on port 8000.
-
-```
-$ export GIT_HASH=`git log -1 --pretty=format:"%H"`
-$ docker build -t allennlp/demo:$GIT_HASH .
-$ mkdir -p $HOME/.allennlp
-$ docker run -p 8000:8000 -v $HOME/.allennlp:/root/.allennlp --rm allennlp/demo:$GIT_HASH
-```
-
-Note that the `run` process may get killed prematurely if there is insufficient memory allocated to Docker. As of September 14, 2018, setting a memory limit of 10GB was sufficient to run the demo. See [Docker Docs](https://docs.docker.com/docker-for-mac/#advanced) for more on setting memory allocation preferences.
-
-## Development
-
-To run the demo for development, you will need to:
-
+## Installation:
 1. Create a fresh environment:
 
+    ```bash
+    conda create -n allennlp-demo python=3.7
+    conda activate allennlp-demo
     ```
-    conda create -n allennlp-demo python=3.6
-    source activate allennlp-demo
-    pip install -r requirements.txt
-    ```
+2. Clone this project and run ``pip install -r requirements.txt``
 
-    Note that this will install the latest _released_ version of AllenNLP - to use a version which you have been working on, run `python setup.py install` in the root of your clone of allennlp.
+2.  Install the version of AllenNLP you would like to use.
 
-2. Build the frontend and start a development frontend service
+    a.  To install the latest release, run `pip install allennlp`.
 
-    ```
+    b.  If you would like to use the same version this commit was tested on, please look in the
+        Dockerfile and install that commit.
+
+        git+git://github.com/allenai/allennlp.git@$SOURCE_COMMIT
+
+    c.  To install AllenNLP from source you can use `pip install --editable .`
+
+2. Build the frontend
+
+    ```bash
     ./scripts/build_demo.py
-    cd demo
-    npm run start
     ```
+3. Replace the files inside the demo/build folder with the files inside the build_replace folder
 
-    This will start a frontend service locally, which will hot refresh when you make changes to the JS.
-
-3. (Optional) Set up a local DB for storing permalinks.
-
-    ```
-    brew install postgresql
-    pg_ctl -D /usr/local/var/postgres start
-    psql -d postgres -a -f scripts/local_db_setup.sql
-    export DEMO_POSTGRES_HOST=localhost
-    export DEMO_POSTGRES_DBNAME=postgres
-    export DEMO_POSTGRES_USER=$USER
-    ```
-
-4. Start the backend service
-
-    ```
-    ./app.py
-    ```
-
-    Normally, the backend server would manage the frontend assets as well - the JS has a special hack for if it is running on port 3000 (which it does by default if you are running the unoptimized JS using `npm run start`), it will look for the backend service at port 8000. Otherwise, it serves the backend and the frontend from the same port.
-
+4. Start the server with 
+```bash
+./app.py --model coreference-resolution
+```
