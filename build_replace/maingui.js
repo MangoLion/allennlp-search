@@ -34,10 +34,7 @@ maingui = {
                 style: { borderStyle: 'dashed' },
                 Data: {
                   HTMLEncode: true,
-                  Items: [
-                    { Text: 'Allen' },
-                    { Text: 'Bill' }
-                  ]
+                  Items: []
                 }
               },
               btAdd: {
@@ -47,7 +44,8 @@ maingui = {
                 W: 130,
                 Data: {
                   HTMLEncode: true,
-                  Text: 'Add'
+                  Text: 'Add',
+                  SelectType: nglSelectSingle
                 },
                 Events: {
                   OnClick: function () {
